@@ -1,17 +1,17 @@
-package com.example.library.entity;
+package com.example.library.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "authors")
-@Data
 @NoArgsConstructor
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "first_name")
     private String firstName;
@@ -19,8 +19,7 @@ public class Author {
     @Column(name = "last_name")
     private String lastName;
 
-    public Author(Long id, String firstName, String lastName) {
-        this.id = id;
+    public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

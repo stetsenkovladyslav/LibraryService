@@ -1,4 +1,4 @@
-package com.example.library.entity;
+package com.example.library.entities;
 
 
 import lombok.Data;
@@ -11,15 +11,13 @@ import javax.persistence.*;
 @Table(name = "genres")
 @NoArgsConstructor
 public class Genre {
-    public Genre(Long id, String genreName) {
-        this.id = id;
-        this.genreName = genreName;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
     private String genreName;
+    public Genre(String genreName) {
+        this.genreName = genreName;
+    }
 
 }

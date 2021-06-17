@@ -1,4 +1,4 @@
-package com.example.library.entity;
+package com.example.library.entities;
 
 
 import lombok.Data;
@@ -14,15 +14,8 @@ import java.util.List;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public Book(Long id, String bookName, String bookGenre, String bookDescription) {
-        this.id = id;
-        this.bookName = bookName;
-        this.bookGenre = bookGenre;
-        this.bookDescription = bookDescription;
-    }
 
     @ManyToMany()
     @JoinTable(
@@ -34,7 +27,7 @@ public class Book {
 
     @ManyToMany()
     @JoinTable(
-            name = "books_geners",
+            name = "books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
 
@@ -44,14 +37,11 @@ public class Book {
     @Column(name = "name")
     private String bookName;
 
-    @Column(name = "author")
-    private String authorName;
-
-    @Column(name = "genre")
-    private String bookGenre;
-
     @Column(name = "description")
     private String bookDescription;
 
-
+    public Book(String bookName, String bookDescription) {
+        this.bookName = bookName;
+        this.bookDescription = bookDescription;
+    }
 }
