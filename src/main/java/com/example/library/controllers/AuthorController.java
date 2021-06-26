@@ -2,6 +2,8 @@ package com.example.library.controllers;
 
 import com.example.library.dto.AuthorDto;
 import com.example.library.entities.Author;
+import com.example.library.mappers.AuthorMapper;
+import com.example.library.mappers.BookMapper;
 import com.example.library.services.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,9 +27,9 @@ public class AuthorController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<Author> createAuthor(@RequestBody AuthorDto authorDto) {
+    ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto authorDto) {
         Author newAuthor = authorService.addAuthor(authorDto);
-        return ResponseEntity.ok(newAuthor);
+        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(newAuthor));
     }
 
     @GetMapping(
@@ -35,12 +37,13 @@ public class AuthorController {
             params = {"page", "limit"}
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<List<Author>> getAllAuthors(@RequestParam int page, @RequestParam int limit) {
+    ResponseEntity<Page<AuthorDto>> getAllAuthors(@RequestParam int page, @RequestParam int limit) {
         Page<Author> allAuthors = authorService.getAllAuthors(page, limit);
         if (allAuthors.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(allAuthors.toList());
+        AuthorMapper authorMapper = AuthorMapper.INSTANCE;
+        return ResponseEntity.ok(allAuthors.map(authorMapper::toDto));
     }
 
     @GetMapping(
@@ -48,9 +51,9 @@ public class AuthorController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Author> getAuthor(@PathVariable Long id) {
+    ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id) {
         Author authorById = authorService.getAuthorById(id);
-        return ResponseEntity.ok(authorById);
+        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(authorById));
     }
 
     @PutMapping(

@@ -1,6 +1,9 @@
 package com.example.library.services.impl;
 
-import com.example.library.dao.AuthorDao;
+import com.example.library.entities.Book;
+import com.example.library.mappers.AuthorMapper;
+import com.example.library.mappers.BookMapper;
+import com.example.library.repositories.AuthorRepository;
 import com.example.library.dto.AuthorDto;
 import com.example.library.entities.Author;
 import com.example.library.services.AuthorService;
@@ -12,35 +15,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorDao authorDao) {
-        this.authorDao = authorDao;
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     @Override
     public Author addAuthor(AuthorDto authorDto) {
-        return authorDao.save(new Author(authorDto.getFirstName(), authorDto.getLastName()));
+        return authorRepository.save(new Author(authorDto.getFirstName(), authorDto.getLastName()));
     }
 
     @Override
     public void deleteAuthorById(long id) {
-        authorDao.deleteById(id);
+        authorRepository.deleteById(id);
     }
 
     @Override
     public void updateAuthorById(long id, AuthorDto authorDto) {
-        authorDao.updateAuthorById(id, authorDto.getFirstName(), authorDto.getLastName());
+        authorRepository.findById(id).orElseThrow();
+        Author updated = AuthorMapper.INSTANCE.dtoToAuthor(authorDto);
+        authorRepository.save(updated);
     }
 
     @Override
     public Author getAuthorById(long id) {
-        return authorDao.getById(id);
+        return authorRepository.getById(id);
     }
 
     @Override
     public Page<Author> getAllAuthors(int page, int limit) {
-        return authorDao.findAll(PageRequest.of(page, limit));
+        return authorRepository.findAll(PageRequest.of(page, limit));
     }
 }

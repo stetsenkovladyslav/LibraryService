@@ -1,4 +1,4 @@
-package com.example.library.dao;
+package com.example.library.repositories;
 
 import com.example.library.entities.Author;
 import com.example.library.entities.Book;
@@ -10,9 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookDao extends JpaRepository<Book, Long> {
-
-    @Query("UPDATE Book SET bookName = :name, bookDescription = :description, authors = :authors, genres = :genres WHERE id = :id")
-    void updateById(long id, String name, String description, List<Author> authors, List<Genre> genres);
-
+public interface BookRepository extends JpaRepository<Book, Long> {
 }

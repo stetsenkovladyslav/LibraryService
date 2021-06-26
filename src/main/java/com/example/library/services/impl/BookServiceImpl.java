@@ -1,9 +1,10 @@
 package com.example.library.services.impl;
 
 
-import com.example.library.dao.AuthorDao;
-import com.example.library.dao.BookDao;
-import com.example.library.dao.GenreDao;
+import com.example.library.mappers.BookMapper;
+import com.example.library.repositories.AuthorRepository;
+import com.example.library.repositories.BookRepository;
+import com.example.library.repositories.GenreRepository;
 import com.example.library.dto.BookDto;
 import com.example.library.entities.Author;
 import com.example.library.entities.Book;
@@ -16,48 +17,50 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class BookServiceImpl implements BookService {
-    private final BookDao bookDao;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
 
     @Autowired
-    public BookServiceImpl(BookDao bookDao, AuthorDao authorDao, GenreDao genreDao) {
-        this.bookDao = bookDao;
-        this.authorDao = authorDao;
-        this.genreDao = genreDao;
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, GenreRepository genreRepository) {
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public Book addBook(BookDto bookDto) {
-        return bookDao.save(buildBook(bookDto));
+        return bookRepository.save(buildBook(bookDto));
     }
 
     @Override
     public void deleteBookById(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
     @Override
     public void updateBookById(long id, BookDto bookDto) {
-        Book book = buildBook(bookDto);
-        bookDao.updateById(id, book.getBookName(), book.getBookDescription(), book.getAuthors(), book.getGenres());
+        bookRepository.findById(id).orElseThrow();
+        Book updated = BookMapper.INSTANCE.dtoToBook(bookDto);
+        bookRepository.save(updated);
     }
 
     @Override
     public Book getBookById(long id) {
-        return bookDao.getById(id);
+        return bookRepository.getById(id);
     }
 
     @Override
     public Page<Book> getAllBooks(int page, int limit) {
-        return bookDao.findAll(PageRequest.of(page, limit));
+        return bookRepository.findAll(PageRequest.of(page, limit));
     }
 
     private Book buildBook(BookDto bookDto) {
-        List<Author> authors = authorDao.getAuthorByIdIn(bookDto.getAuthorsId());
-        List<Genre> genres = genreDao.getGenreByIdIn(bookDto.getGenresId());
+        List<Author> authors = authorRepository.getAuthorByIdIn(bookDto.getAuthorsId());
+        List<Genre> genres = genreRepository.getGenreByIdIn(bookDto.getGenresId());
         Book newBook = new Book();
         newBook.setBookName(bookDto.getName());
         newBook.setBookDescription(bookDto.getDescription());

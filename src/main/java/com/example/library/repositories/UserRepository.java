@@ -1,4 +1,4 @@
-package com.example.library.dao;
+package com.example.library.repositories;
 
 import com.example.library.entities.User;
 import org.springframework.data.domain.Page;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserDao extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 

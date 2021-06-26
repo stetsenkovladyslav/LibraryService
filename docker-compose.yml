@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  app:
+    image: 'library_task:latest'
+    build:
+      context: ""
+    container_name: library_task
+    depends_on:
+      - db
+    environment:
+      - DB_URL=jdbc:postgresql://library_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+  db:
+    image: "postgres:13.1-alpine"
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

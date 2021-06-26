@@ -1,4 +1,4 @@
-package com.example.library.dao;
+package com.example.library.repositories;
 
 import com.example.library.entities.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GenreDao extends JpaRepository<Genre, Long> {
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     List<Genre> getGenreByIdIn(List<Long> ids);
 

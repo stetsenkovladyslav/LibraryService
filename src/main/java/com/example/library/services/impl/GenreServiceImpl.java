@@ -1,6 +1,9 @@
 package com.example.library.services.impl;
 
-import com.example.library.dao.GenreDao;
+import com.example.library.entities.Book;
+import com.example.library.mappers.BookMapper;
+import com.example.library.mappers.GenreMapper;
+import com.example.library.repositories.GenreRepository;
 import com.example.library.dto.GenreDto;
 import com.example.library.entities.Genre;
 import com.example.library.services.GenreService;
@@ -12,35 +15,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
     @Autowired
-    public GenreServiceImpl(GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenreServiceImpl(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public Genre addGenre(GenreDto genreDto) {
-        return genreDao.save(new Genre(genreDto.getName()));
+        return genreRepository.save(new Genre(genreDto.getName()));
     }
 
     @Override
     public void deleteGenreById(long id) {
-        genreDao.deleteById(id);
+        genreRepository.deleteById(id);
     }
 
     @Override
     public void updateGenre(long id, GenreDto genreDto) {
-        genreDao.updateGenreById(id, genreDto.getName());
+        genreRepository.findById(id).orElseThrow();
+        Genre updated = GenreMapper.INSTANCE.dtoToGenre(genreDto);
+        genreRepository.save(updated);
     }
 
     @Override
     public Genre getGenreById(long id) {
-        return genreDao.getById(id);
+        return genreRepository.getById(id);
     }
 
     @Override
     public Page<Genre> getAllGenres(int page, int limit) {
-        return genreDao.findAll(PageRequest.of(page, limit));
+        return genreRepository.findAll(PageRequest.of(page, limit));
     }
 }
