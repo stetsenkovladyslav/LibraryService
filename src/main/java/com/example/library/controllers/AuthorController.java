@@ -3,7 +3,6 @@ package com.example.library.controllers;
 import com.example.library.dto.AuthorDto;
 import com.example.library.entities.Author;
 import com.example.library.mappers.AuthorMapper;
-import com.example.library.mappers.BookMapper;
 import com.example.library.services.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/authors")

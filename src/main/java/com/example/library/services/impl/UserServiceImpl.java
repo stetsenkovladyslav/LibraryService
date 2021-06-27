@@ -1,10 +1,11 @@
 package com.example.library.services.impl;
 
-import com.example.library.repositories.UserRepository;
 import com.example.library.dto.UserDto;
 import com.example.library.entities.Role;
 import com.example.library.entities.User;
+import com.example.library.repositories.UserRepository;
 import com.example.library.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;

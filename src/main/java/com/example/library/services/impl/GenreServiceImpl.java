@@ -1,11 +1,9 @@
 package com.example.library.services.impl;
 
-import com.example.library.entities.Book;
-import com.example.library.mappers.BookMapper;
-import com.example.library.mappers.GenreMapper;
-import com.example.library.repositories.GenreRepository;
 import com.example.library.dto.GenreDto;
 import com.example.library.entities.Genre;
+import com.example.library.mappers.GenreMapper;
+import com.example.library.repositories.GenreRepository;
 import com.example.library.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
