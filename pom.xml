@@ -108,9 +108,12 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.10.0</version>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/library_db</url>
-                    <user>postgres</user>
-                    <password>postgres</password>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <url>${db.url}</url>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <user>${db.username}</user>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <password>${db.password}</password>
                     <schemas>
                         <schema>public</schema>
                     </schemas>

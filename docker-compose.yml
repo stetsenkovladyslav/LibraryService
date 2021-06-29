@@ -1,16 +1,23 @@
 version: '3.8'
-
 services:
   app:
-    image: 'library_task:latest'
+    image: 'library_task'
+    container_name: "library_task"
     build:
       context: .
-    container_name: library_task
+    ports:
+      - 8080:8080
     depends_on:
       - db
+    env_file:
+      - .env
+    environment:
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
   db:
     image: "postgres:13.1-alpine"
-    container_name: library_db
+    container_name: "library_db"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    - POSTGRES_USER=${DB_USERNAME}
+    - POSTGRES_PASSWORD=${DB_PASSWORD}
