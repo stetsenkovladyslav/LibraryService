@@ -16,8 +16,10 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
   db:
-    image: "postgres:13.1-alpine"
-    container_name: "library_db"
+    image: "postgres"
+    container_name: "postgres"
+    ports:
+    - 5432:5432
     environment:
     - POSTGRES_USER=${DB_USERNAME}
     - POSTGRES_PASSWORD=${DB_PASSWORD}
