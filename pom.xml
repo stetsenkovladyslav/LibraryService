@@ -13,13 +13,15 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>library</name>
     <description>Demo project for Spring Boot</description>
+
     <properties>
         <java.version>11</java.version>
         <lombok-version>1.18.12</lombok-version>
-            <flyway.user>postgres</flyway.user>
+<!--            <flyway.user>postgres</flyway.user>
             <flyway.password>postgres</flyway.password>
-            <flyway.schemas>library_db</flyway.schemas>
+            <flyway.schemas>library_db</flyway.schemas>-->
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,7 +40,6 @@
             <artifactId>flyway-core</artifactId>
             <version>7.10.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -84,7 +85,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -137,7 +137,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
