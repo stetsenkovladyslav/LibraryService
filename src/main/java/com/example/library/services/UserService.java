@@ -3,6 +3,7 @@ package com.example.library.services;
 import com.example.library.dto.UserDto;
 import com.example.library.entities.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
@@ -13,7 +14,7 @@ public interface UserService extends UserDetailsService {
 
     void approveUserById(long id);
 
-    Page<User> getAllNotEnabled(int page, int limit);
+    Page<User> getAllNotEnabled(Pageable pageable);
 
     User getNotEnabledById(long id);
 }

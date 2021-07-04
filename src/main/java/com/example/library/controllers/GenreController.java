@@ -5,17 +5,19 @@ import com.example.library.entities.Genre;
 import com.example.library.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
 @RequestMapping("/genres")
 @RequiredArgsConstructor
-@Secured({"ROLE_USER", "ROLE_ADMIN"})
 public class GenreController {
 
     private final GenreService genreService;
@@ -25,7 +27,7 @@ public class GenreController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<Genre> createGenre(@RequestBody GenreDto genreDto) {
+    ResponseEntity<Genre> createGenre(@RequestBody @Valid GenreDto genreDto) {
         Genre newGenre = genreService.addGenre(genreDto);
         return ResponseEntity.ok(newGenre);
     }
@@ -35,8 +37,8 @@ public class GenreController {
             params = {"page", "limit"}
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<List<Genre>> getAllGenres(@RequestParam int page, @RequestParam int limit) {
-        Page<Genre> allGenres = genreService.getAllGenres(page, limit);
+    ResponseEntity<List<Genre>> getAllGenres(@RequestParam Pageable pageable) {
+        Page<Genre> allGenres = genreService.getAllGenres(pageable);
         if (allGenres.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -48,7 +50,9 @@ public class GenreController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Genre> getGenre(@PathVariable Long id) {
+    ResponseEntity<Genre> getGenre(
+            @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
+    ) {
         Genre genreById = genreService.getGenreById(id);
         return ResponseEntity.ok(genreById);
     }
@@ -58,7 +62,10 @@ public class GenreController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<?> updateGenre(@PathVariable Long id, @RequestBody GenreDto genreDto) {
+    ResponseEntity<?> updateGenre(
+            @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id,
+            @RequestBody @Valid GenreDto genreDto
+    ) {
         genreService.updateGenre(id, genreDto);
         return ResponseEntity.ok().build();
     }
@@ -67,7 +74,9 @@ public class GenreController {
             value = "/{id}"
     )
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<?> deleteGenre(@PathVariable Long id) {
+    ResponseEntity<?> deleteGenre(
+            @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
+    ) {
         genreService.deleteGenreById(id);
         return ResponseEntity.ok().build();
     }

@@ -3,6 +3,7 @@ package com.example.library.services;
 import com.example.library.dto.GenreDto;
 import com.example.library.entities.Genre;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GenreService {
 
@@ -14,6 +15,6 @@ public interface GenreService {
 
     Genre getGenreById(long id);
 
-    Page<Genre> getAllGenres(int page, int limit);
+    Page<Genre> getAllGenres(Pageable pageable);
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "authors")
 @NoArgsConstructor
 public class Author {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

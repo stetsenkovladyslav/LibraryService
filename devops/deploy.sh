@@ -1,4 +1,5 @@
 cd ..
-mvn clean package
+mvn  clean package spring-boot:repackage
 cd devops/
 docker-compose up
+

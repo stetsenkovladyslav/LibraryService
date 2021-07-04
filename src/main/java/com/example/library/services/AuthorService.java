@@ -3,6 +3,7 @@ package com.example.library.services;
 import com.example.library.dto.AuthorDto;
 import com.example.library.entities.Author;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AuthorService {
 
@@ -14,6 +15,6 @@ public interface AuthorService {
 
     Author getAuthorById(long id);
 
-    Page<Author> getAllAuthors(int page, int limit);
+    Page<Author> getAllAuthors(Pageable pageable);
 
 }

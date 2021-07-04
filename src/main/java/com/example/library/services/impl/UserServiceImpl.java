@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,8 +62,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAllNotEnabled(int page, int limit) {
-        return userRepository.findAllByEnabledIsFalse(PageRequest.of(page, limit));
+    public Page<User> getAllNotEnabled(Pageable pageable) {
+        return userRepository.findAllByEnabledIsFalse(pageable);
     }
 
     @Override

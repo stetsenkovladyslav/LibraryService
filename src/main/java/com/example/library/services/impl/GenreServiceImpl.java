@@ -8,6 +8,7 @@ import com.example.library.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +44,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Page<Genre> getAllGenres(int page, int limit) {
-        return genreRepository.findAll(PageRequest.of(page, limit));
+    public Page<Genre> getAllGenres(Pageable pageable) {
+        return genreRepository.findAll(pageable);
     }
 }

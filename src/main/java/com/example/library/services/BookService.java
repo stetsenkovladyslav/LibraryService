@@ -3,6 +3,7 @@ package com.example.library.services;
 import com.example.library.dto.BookDto;
 import com.example.library.entities.Book;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
 
@@ -14,5 +15,5 @@ public interface BookService {
 
     Book getBookById(long id);
 
-    Page<Book> getAllBooks(int page, int limit);
+    Page<Book> getAllBooks(Pageable pageable);
 }

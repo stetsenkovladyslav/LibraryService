@@ -8,6 +8,7 @@ import com.example.library.services.UserService;
 import com.example.library.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -15,6 +16,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/users")
@@ -29,7 +33,7 @@ public class UserController {
             value = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthenticationRequest auth) {
+    public ResponseEntity<String> createAuthenticationToken(@RequestBody @Valid AuthenticationRequest auth) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword()));
         final UserDetails userDetails = userService.login(auth.getUsername(), auth.getPassword());
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -40,7 +44,7 @@ public class UserController {
             value = "/register",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserDto userDto) {
         User newUser = userService.register(userDto);
         if (!newUser.isEnabled()) {
             return ResponseEntity.ok("Waiting for approval");
@@ -52,7 +56,9 @@ public class UserController {
             value = "/approve/{id}"
     )
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> approveUser(@PathVariable Long id) {
+    public ResponseEntity<String> approveUser(
+            @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
+    ) {
         userService.approveUserById(id);
         return ResponseEntity.ok("User approved");
     }
@@ -62,8 +68,8 @@ public class UserController {
             params = {"limit", "page"}
     )
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Page<User>> getAllRegistrationRequests(@RequestParam int page, @RequestParam int limit) {
-        Page<User> allNotEnabled = userService.getAllNotEnabled(page, limit);
+    public ResponseEntity<Page<User>> getAllRegistrationRequests(@RequestParam Pageable pageable) {
+        Page<User> allNotEnabled = userService.getAllNotEnabled(pageable);
         if (allNotEnabled.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -75,7 +81,9 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<User> getRegistrationRequest(@PathVariable Long id) {
+    public ResponseEntity<User> getRegistrationRequest(
+            @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
+    ) {
         User user = userService.getNotEnabledById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();

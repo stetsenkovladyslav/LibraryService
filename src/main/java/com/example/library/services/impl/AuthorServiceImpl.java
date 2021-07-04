@@ -8,6 +8,7 @@ import com.example.library.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +44,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Page<Author> getAllAuthors(int page, int limit) {
-        return authorRepository.findAll(PageRequest.of(page, limit));
+    public Page<Author> getAllAuthors(Pageable pageable) {
+        return authorRepository.findAll(pageable);
     }
 }
