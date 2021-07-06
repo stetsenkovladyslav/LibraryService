@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.example.library.repositories")
+@EnableJpaRepositories("com.example.library.repository")
 @EnableConfigurationProperties
 @EnableGlobalMethodSecurity(
         securedEnabled = true
