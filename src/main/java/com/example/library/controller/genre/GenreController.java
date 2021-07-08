@@ -1,6 +1,8 @@
 package com.example.library.controller.genre;
 
 import com.example.library.dto.genre.GenreDto;
+import com.example.library.mapper.author.AuthorMapper;
+import com.example.library.mapper.genre.GenreMapper;
 import com.example.library.model.genre.Genre;
 import com.example.library.service.genre.GenreService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,9 @@ public class GenreController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_ADMIN"})
-    ResponseEntity<Genre> createGenre(@RequestBody @Valid GenreDto genreDto) {
+    ResponseEntity<GenreDto> createGenre(@RequestBody @Valid GenreDto genreDto) {
         Genre newGenre = genreService.addGenre(genreDto);
-        return ResponseEntity.ok(newGenre);
+        return ResponseEntity.ok(GenreMapper.INSTANCE.toDto(newGenre));
     }
 
     @GetMapping(
@@ -57,7 +59,7 @@ public class GenreController {
         return ResponseEntity.ok(genreById);
     }
 
-    @PutMapping(
+    @PatchMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )

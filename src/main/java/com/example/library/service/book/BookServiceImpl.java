@@ -1,28 +1,42 @@
 package com.example.library.service.book;
 
 import com.example.library.dto.book.BookDto;
-import com.example.library.model.book.Book;
 import com.example.library.mapper.book.BookMapper;
+import com.example.library.model.author.Author;
+import com.example.library.model.book.Book;
+import com.example.library.model.book.BookPage;
+import com.example.library.model.book.BookSearchCriteria;
+import com.example.library.model.genre.Genre;
+import com.example.library.repository.author.AuthorRepository;
+import com.example.library.repository.book.BookCriteriaRepository;
 import com.example.library.repository.book.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.library.repository.genre.GenreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
+
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final GenreRepository genreRepository;
+    private final AuthorRepository authorRepository;
+    private final BookCriteriaRepository bookCriteriaRepository;
+    private final BookMapper bookMapper;
 
-
-    @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public Book addBook(BookDto bookDto) {
         Book newBook = BookMapper.INSTANCE.dtoToBook(bookDto);
+        List<Genre> genreList = genreRepository.getGenreByIdIn(bookDto.getGenresId());
+        List<Author> authorList = authorRepository.getAuthorByIdIn(bookDto.getAuthorsId());
+        newBook.setAuthors(authorList);
+        newBook.setGenres(genreList);
         return bookRepository.save(newBook);
     }
 
@@ -44,7 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> getAllBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+    public Page<Book> getAllBooks(BookPage bookPage, BookSearchCriteria bookSearchCriteria) {
+        return bookCriteriaRepository.findAllWithFilters(bookPage, bookSearchCriteria);
     }
 }

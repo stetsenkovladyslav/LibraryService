@@ -3,10 +3,11 @@ package com.example.library.controller.book;
 import com.example.library.dto.book.BookDto;
 import com.example.library.model.book.Book;
 import com.example.library.mapper.book.BookMapper;
+import com.example.library.model.book.BookPage;
+import com.example.library.model.book.BookSearchCriteria;
 import com.example.library.service.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -33,12 +34,11 @@ public class BookController {
     }
 
     @GetMapping(
-            params = {"page", "limit"},
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Page<BookDto>> getAllBooks(@RequestParam Pageable pageable) {
-        Page<Book> allBooks = bookService.getAllBooks(pageable);
+    ResponseEntity<Page<BookDto>> getAllBooks(BookPage bookPage, BookSearchCriteria bookSearchCriteria) {
+        Page<Book> allBooks = bookService.getAllBooks(bookPage, bookSearchCriteria);
         if (allBooks.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -58,7 +58,7 @@ public class BookController {
         return ResponseEntity.ok(BookMapper.INSTANCE.toDto(bookById));
     }
 
-    @PutMapping(
+    @PatchMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )

@@ -1,14 +1,12 @@
 package com.example.library.controller.author;
 
 import com.example.library.dto.author.AuthorDto;
-import com.example.library.model.author.Author;
 import com.example.library.mapper.author.AuthorMapper;
+import com.example.library.model.author.Author;
 import com.example.library.service.author.AuthorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -60,7 +58,7 @@ public class AuthorController {
         return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(authorById));
     }
 
-    @PutMapping(
+    @PatchMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )

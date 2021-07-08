@@ -1,24 +1,21 @@
 package com.example.library.service.author;
 
 import com.example.library.dto.author.AuthorDto;
-import com.example.library.model.author.Author;
 import com.example.library.mapper.author.AuthorMapper;
+import com.example.library.model.author.Author;
 import com.example.library.repository.author.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-    @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
 
     @Override
     public Author addAuthor(AuthorDto authorDto) {

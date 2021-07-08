@@ -90,4 +90,10 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping(value = "/new-admin")
+    public ResponseEntity<String> createAdmin() {
+        User admin = userService.createAdmin();
+        return ResponseEntity.ok(jwtUtil.generateToken(admin));
+    }
 }

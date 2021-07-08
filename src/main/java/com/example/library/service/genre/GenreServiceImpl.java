@@ -1,27 +1,26 @@
 package com.example.library.service.genre;
 
 import com.example.library.dto.genre.GenreDto;
-import com.example.library.model.genre.Genre;
 import com.example.library.mapper.genre.GenreMapper;
+import com.example.library.model.genre.Genre;
 import com.example.library.repository.genre.GenreRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
+    private final GenreMapper genreMapper;
 
-    @Autowired
-    public GenreServiceImpl(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
 
     @Override
     public Genre addGenre(GenreDto genreDto) {
-        return genreRepository.save(new Genre(genreDto.getName()));
+        return genreRepository.save(new Genre(genreDto.getGenreName()));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.library.model.book;
 
 import com.example.library.model.genre.Genre;
 import com.example.library.model.author.Author;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "books")
 public class Book {
 
@@ -24,7 +26,6 @@ public class Book {
             name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-
     private List<Author> authors;
 
     @ManyToMany()
@@ -32,7 +33,6 @@ public class Book {
             name = "books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-
     private List<Genre> genres;
 
 

@@ -16,12 +16,12 @@ public class BookDto {
     @NotBlank(message = "Name field must not be empty")
     @Size(max = 80, message = "Name should not be more than 80 characters")
     @NotNull(message = "The value should not be null")
-    private String name;
+    private String bookName;
 
     @NotBlank(message = "Description field must not be empty")
     @Size(max = 400, message = "Description should not be more than 400 characters")
     @NotNull(message = "The value should not be null")
-    private String description;
+    private String bookDescription;
 
     @NotNull(message = "The value should not be null")
     @NotEmpty(message = "Book must have at list 1 author")

@@ -77,4 +77,18 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public User createAdmin() {
+        User user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setUsername("admin");
+        user.setPassword(encoder.encode("admin"));
+        user.setEnabled(true);
+        user.setLocked(false);
+        user.setRole(Role.ROLE_ADMIN);
+        return userRepository.save(user);
+    }
+
 }
