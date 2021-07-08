@@ -27,43 +27,45 @@ public class BookCriteriaRepository {
         this.criteriaBuilder = entityManager.getCriteriaBuilder();
     }
 
-    public Page<Book> findAllWithFilters(BookPage BookPage,
-                                         BookSearchCriteria BookSearchCriteria){
+    public Page<Book> findAllWithFilters(BookPage bookPage,
+                                         BookSearchCriteria BookSearchCriteria) {
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
         Root<Book> BookRoot = criteriaQuery.from(Book.class);
         Predicate predicate = getPredicate(BookSearchCriteria, BookRoot);
         criteriaQuery.where(predicate);
-        setOrder(BookPage, criteriaQuery, BookRoot);
+        setOrder(bookPage, criteriaQuery, BookRoot);
 
         TypedQuery<Book> typedQuery = entityManager.createQuery(criteriaQuery);
-        typedQuery.setFirstResult(BookPage.getPageNumber() * BookPage.getPageSize());
-        typedQuery.setMaxResults(BookPage.getPageSize());
+        typedQuery.setFirstResult(bookPage.getPageNumber() * bookPage.getPageSize());
+        typedQuery.setMaxResults(bookPage.getPageSize());
 
-        Pageable pageable = getPageable(BookPage);
+        Pageable pageable = getPageable(bookPage);
 
         long BooksCount = getBooksCount(predicate);
 
         return new PageImpl<>(typedQuery.getResultList(), pageable, BooksCount);
     }
 
-    /*
-    как сделать чтобы в аргументы передавать не автора, а ферст и ласт нейм как два аргумента
-    как списки авторов и жанров сравнить с  ферстнейи и ластнейм
-    * */
-    private Predicate getPredicate(BookSearchCriteria BookSearchCriteria,
-                                   Root<Book> BookRoot) {
+    private Predicate getPredicate(BookSearchCriteria bookSearchCriteria,
+                                   Root<Book> bookRoot) {
         List<Predicate> predicates = new ArrayList<>();
-        if(Objects.nonNull(BookSearchCriteria.getGenre())){
-            predicates.add(criteriaBuilder.like(BookRoot.get("genres"),
-                            "%" + BookSearchCriteria.getGenre() + "%")
+
+
+        if (Objects.nonNull(bookSearchCriteria.getGenre())) {
+            ListJoin<Book, Genre> joinedGenreList = bookRoot.joinList("genres");
+            predicates.add(
+                    criteriaBuilder.equal(joinedGenreList.get("genreName"), bookSearchCriteria.getGenre())
             );
         }
-    /*    if(Objects.nonNull(BookSearchCriteria.getAuthorFirstName()) &&
-           Objects.nonNull(BookSearchCriteria.getAuthorLastName())){
-            predicates.add(
-                    criteriaBuilder.like(BookRoot.get("authors"),
-                            "%" + BookSearchCriteria.getAuthor() + "%")
-            );*/
+        if (Objects.nonNull(bookSearchCriteria.getAuthorFirstName()) &&
+            Objects.nonNull(bookSearchCriteria.getAuthorLastName())) {
+            ListJoin<Book, Author> joinedAuthorList = bookRoot.joinList("authors");
+            predicates.addAll(
+                    List.of(
+                            criteriaBuilder.equal(joinedAuthorList.get("firstName"), bookSearchCriteria.getAuthorFirstName()),
+                            criteriaBuilder.equal(joinedAuthorList.get("lastName"), bookSearchCriteria.getAuthorLastName())
+                    )
+            );
         }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
