@@ -5,6 +5,7 @@ import com.example.library.dto.user.UserDto;
 import com.example.library.model.user.Role;
 import com.example.library.model.user.User;
 import com.example.library.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -89,6 +93,13 @@ public class UserServiceImpl implements UserService {
         user.setLocked(false);
         user.setRole(Role.ROLE_ADMIN);
         return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        Optional<User> result = userRepository.findByUsername(username);
+        log.info("IN findByUsername - user: {} found by username: {}", result, username);
+        return result;
     }
 
 }

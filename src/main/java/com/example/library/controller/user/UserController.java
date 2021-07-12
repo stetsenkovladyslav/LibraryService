@@ -5,7 +5,7 @@ import com.example.library.dto.authentication.AuthenticationRequest;
 import com.example.library.dto.user.UserDto;
 import com.example.library.model.user.User;
 import com.example.library.service.user.UserService;
-import com.example.library.util.JwtUtil;
+import com.example.library.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

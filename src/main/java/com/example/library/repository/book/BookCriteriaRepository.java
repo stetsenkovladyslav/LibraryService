@@ -1,8 +1,10 @@
 package com.example.library.repository.book;
 
+import com.example.library.model.author.Author;
 import com.example.library.model.book.Book;
 import com.example.library.model.book.BookPage;
 import com.example.library.model.book.BookSearchCriteria;
+import com.example.library.model.genre.Genre;
 import org.apache.maven.model.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

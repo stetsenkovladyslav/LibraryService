@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.function.Predicate;
 
 @Data
 @Entity
@@ -24,4 +26,5 @@ public class Author {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
 }

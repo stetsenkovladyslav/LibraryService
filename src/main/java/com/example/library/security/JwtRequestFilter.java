@@ -1,6 +1,5 @@
-package com.example.library.configuration;
+package com.example.library.security;
 
-import com.example.library.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,13 +35,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
         }
 
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 

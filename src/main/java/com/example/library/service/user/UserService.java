@@ -2,10 +2,11 @@ package com.example.library.service.user;
 
 import com.example.library.dto.user.UserDto;
 import com.example.library.model.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -20,4 +21,6 @@ public interface UserService extends UserDetailsService {
     User getNotEnabledById(long id);
 
     User createAdmin();
+
+    Optional<User> findByUsername(String username);
 }
