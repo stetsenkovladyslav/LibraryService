@@ -1,5 +1,6 @@
 package com.example.library.service.book;
 
+import com.example.library.dto.book.BookCriteria;
 import com.example.library.dto.book.BookDto;
 import com.example.library.model.book.Book;
 import com.example.library.model.book.BookPage;
@@ -17,5 +18,6 @@ public interface BookService {
 
     Book getBookById(long id);
 
-    Page<Book> getAllBooks(BookPage bookPage, BookSearchCriteria bookSearchCriteria);
+    Page<Book> getAllBooks(Pageable pageable, BookCriteria bookCriteria);
+
 }
