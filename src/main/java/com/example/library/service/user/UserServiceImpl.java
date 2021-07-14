@@ -2,9 +2,12 @@ package com.example.library.service.user;
 
 import com.example.library.controller.exception.UserAlreadyExistException;
 import com.example.library.dto.user.UserDto;
+import com.example.library.mapper.user.UserMapper;
 import com.example.library.model.user.Role;
 import com.example.library.model.user.User;
 import com.example.library.repository.user.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,11 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+    private final UserMapper userMapper;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder encoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.encoder = encoder;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -47,15 +53,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(UserDto userDto) throws UserAlreadyExistException {
-        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
-            throw new UserAlreadyExistException("User with this username already exist");
-        }
+        userRepository.findByUsername(userDto.getUsername()).orElseThrow(()
+                ->  new UserAlreadyExistException("User with this username already exist"));
         User newUser = new User();
-        newUser.setFirstName(userDto.getFirstName());
-        newUser.setLastName(userDto.getLastName());
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(encoder.encode(userDto.getPassword()));
-        newUser.setRole(userDto.getRole());
+        userMapper.dtoToUser(userDto);
         newUser.setLocked(false);
         newUser.setEnabled(userDto.getRole() == Role.ROLE_USER);
         return userRepository.save(newUser);

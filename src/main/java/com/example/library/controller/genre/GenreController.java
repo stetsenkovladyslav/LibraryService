@@ -23,6 +23,7 @@ import java.util.List;
 public class GenreController {
 
     private final GenreService genreService;
+    private final GenreMapper genreMapper;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -31,7 +32,7 @@ public class GenreController {
     @Secured({"ROLE_ADMIN"})
     ResponseEntity<GenreDto> createGenre(@RequestBody @Valid GenreDto genreDto) {
         Genre newGenre = genreService.addGenre(genreDto);
-        return ResponseEntity.ok(GenreMapper.INSTANCE.toDto(newGenre));
+        return ResponseEntity.ok(genreMapper.toDto(newGenre));
     }
 
     @GetMapping(
@@ -39,12 +40,12 @@ public class GenreController {
             params = {"page", "limit"}
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<List<Genre>> getAllGenres(@RequestParam Pageable pageable) {
+    ResponseEntity<Page<GenreDto>> getAllGenres(@RequestParam Pageable pageable) {
         Page<Genre> allGenres = genreService.getAllGenres(pageable);
         if (allGenres.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(allGenres.toList());
+        return ResponseEntity.ok(allGenres.map(genreMapper::toDto));
     }
 
     @GetMapping(
@@ -52,11 +53,11 @@ public class GenreController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Genre> getGenre(
+    ResponseEntity<GenreDto> getGenre(
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         Genre genreById = genreService.getGenreById(id);
-        return ResponseEntity.ok(genreById);
+        return ResponseEntity.ok(genreMapper.toDto(genreById));
     }
 
     @PatchMapping(

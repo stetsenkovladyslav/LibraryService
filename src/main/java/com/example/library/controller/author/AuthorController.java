@@ -21,6 +21,7 @@ import javax.validation.constraints.Positive;
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -29,7 +30,7 @@ public class AuthorController {
     @Secured({"ROLE_ADMIN"})
     ResponseEntity<AuthorDto> createAuthor(@RequestBody @Valid AuthorDto authorDto) {
         Author newAuthor = authorService.addAuthor(authorDto);
-        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(newAuthor));
+        return ResponseEntity.ok(authorMapper.toDto(newAuthor));
     }
 
     @GetMapping(
@@ -42,8 +43,9 @@ public class AuthorController {
         if (allAuthors.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        AuthorMapper authorMapper = AuthorMapper.INSTANCE;
         return ResponseEntity.ok(allAuthors.map(authorMapper::toDto));
+
+
     }
 
     @GetMapping(

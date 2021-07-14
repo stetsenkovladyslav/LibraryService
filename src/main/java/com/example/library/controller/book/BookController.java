@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 public class BookController {
 
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -31,7 +32,7 @@ public class BookController {
     @Secured({"ROLE_ADMIN"})
     ResponseEntity<BookDto> createBook(@RequestBody @Valid BookDto bookDto) {
         Book newBook = bookService.addBook(bookDto);
-        return ResponseEntity.ok(BookMapper.INSTANCE.toDto(newBook));
+        return ResponseEntity.ok(bookMapper.toDto(newBook));
     }
 
     @GetMapping(
@@ -40,11 +41,8 @@ public class BookController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     ResponseEntity<Page<BookDto>> getAllBooks(Pageable pageable, BookCriteria bookCriteria) {
         Page<Book> allBooks = bookService.getAllBooks(pageable, bookCriteria);
-        if (allBooks.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        BookMapper bookMapper = BookMapper.INSTANCE;
         return ResponseEntity.ok(allBooks.map(bookMapper::toDto));
+
     }
 
     @GetMapping(
@@ -56,7 +54,7 @@ public class BookController {
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         Book bookById = bookService.getBookById(id);
-        return ResponseEntity.ok(BookMapper.INSTANCE.toDto(bookById));
+        return ResponseEntity.ok(bookMapper.toDto(bookById));
     }
 
     @PatchMapping(

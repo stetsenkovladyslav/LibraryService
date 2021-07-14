@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book addBook(BookDto bookDto) {
-        Book newBook = BookMapper.INSTANCE.dtoToBook(bookDto);
+        Book newBook = bookMapper.dtoToBook(bookDto);
         List<Genre> genreList = genreRepository.getGenreByIdIn(bookDto.getGenresId());
         List<Author> authorList = authorRepository.getAuthorByIdIn(bookDto.getAuthorsId());
         newBook.setAuthors(authorList);
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBookById(long id, BookDto bookDto) {
         bookRepository.findById(id).orElseThrow();
-        Book updated = BookMapper.INSTANCE.dtoToBook(bookDto);
+        Book updated = bookMapper.dtoToBook(bookDto);
         bookRepository.save(updated);
     }
 

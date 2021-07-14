@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
@@ -31,7 +30,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void updateGenre(long id, GenreDto genreDto) {
         genreRepository.findById(id).orElseThrow();
-        Genre updated = GenreMapper.INSTANCE.dtoToGenre(genreDto);
+        Genre updated = genreMapper.dtoToGenre(genreDto);
         genreRepository.save(updated);
     }
 

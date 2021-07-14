@@ -30,7 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void updateAuthorById(long id, AuthorDto authorDto) {
         authorRepository.findById(id).orElseThrow();
-        Author updated = AuthorMapper.INSTANCE.dtoToAuthor(authorDto);
+        Author updated = authorMapper.dtoToAuthor(authorDto);
         authorRepository.save(updated);
     }
 
