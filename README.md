@@ -2,7 +2,7 @@
 
 ### This is a simple RESTful Web service for viewing and downloading books.
 
--  ### ou can see all the requests on the site:
+-  ### You can see all the requests on the site:
    http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
 -  ### Stack 
    - Spring Framework
