@@ -34,11 +34,10 @@ public class AuthorController {
     }
 
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"page", "limit"}
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Page<AuthorDto>> getAllAuthors(@RequestParam Pageable pageable) {
+    ResponseEntity<Page<AuthorDto>> getAllAuthors(Pageable pageable) {
         Page<Author> allAuthors = authorService.getAllAuthors(pageable);
         if (allAuthors.isEmpty()) {
             return ResponseEntity.notFound().build();

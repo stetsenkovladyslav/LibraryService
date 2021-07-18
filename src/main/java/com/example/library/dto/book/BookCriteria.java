@@ -6,7 +6,6 @@ import com.example.library.model.book.Book;
 import com.example.library.model.genre.Genre;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.ListJoin;

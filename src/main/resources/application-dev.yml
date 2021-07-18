@@ -7,3 +7,6 @@ spring:
 jwt:
   token:
     secret: ghshjs3672382h22j3h2
+
+aws:
+  s3-bucket: bucket

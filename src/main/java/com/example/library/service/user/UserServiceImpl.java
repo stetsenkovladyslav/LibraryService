@@ -6,8 +6,6 @@ import com.example.library.mapper.user.UserMapper;
 import com.example.library.model.user.Role;
 import com.example.library.model.user.User;
 import com.example.library.repository.user.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -45,8 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String username, String password) {
-        var user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AccessDeniedException("User does not exist"));
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with username:{" + username + "} does not exist"));
         if (!encoder.matches(password, user.getPassword()))
             throw new AccessDeniedException("Incorrect password");
         return user;
@@ -54,10 +52,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(UserDto userDto) throws UserAlreadyExistException {
-        userRepository.findByUsername(userDto.getUsername()).orElseThrow(()
-                ->  new UserAlreadyExistException("User with this username already exist"));
-        User newUser = new User();
-        userMapper.dtoToUser(userDto);
+        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+            throw new UserAlreadyExistException("User with thi1s username already exist");
+        }
+        User newUser = userMapper.dtoToUser(userDto);
+        newUser.setPassword(encoder.encode(userDto.getPassword()));
         newUser.setLocked(false);
         newUser.setEnabled(userDto.getRole() == Role.ROLE_USER);
         return userRepository.save(newUser);

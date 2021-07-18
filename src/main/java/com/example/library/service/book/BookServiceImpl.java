@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookById(long id) {
-        return bookRepository.getById(id);
+        return bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id:{" + id + "} does not exist"));
     }
 
     @Override

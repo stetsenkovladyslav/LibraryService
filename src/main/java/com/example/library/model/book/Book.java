@@ -1,8 +1,8 @@
 package com.example.library.model.book;
 
 
-import com.example.library.model.genre.Genre;
 import com.example.library.model.author.Author;
+import com.example.library.model.genre.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

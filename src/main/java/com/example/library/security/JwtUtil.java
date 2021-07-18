@@ -16,7 +16,8 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private final String secret;
-    public JwtUtil(@Value("${jwt.token.secret}") String secret){
+
+    public JwtUtil(@Value("${jwt.token.secret}") String secret) {
         this.secret = secret;
 
     }

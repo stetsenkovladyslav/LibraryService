@@ -4,16 +4,18 @@ services:
   app:
     image: 'library:latest'
     build:
-      context: ""
+      ../
     container_name: app
     ports:
-      - 8087:8087
+      - 8080:8080
     depends_on:
       - db
+      - localstack
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+    restart: on-failure
 
   db:
     image: 'postgres'
@@ -24,3 +26,13 @@ services:
       POSTGRES_DB: library_db
       POSTGRES_INITDB_ARGS: -A md5
     command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+
+  localstack:
+    image: localstack/localstack:0.12.9.1
+    environment:
+      - SERVICES=s3
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - ./localstack:/tmp/localstack
+    ports:
+      - 4566:4566
