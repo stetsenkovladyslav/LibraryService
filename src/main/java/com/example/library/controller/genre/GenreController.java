@@ -1,7 +1,6 @@
 package com.example.library.controller.genre;
 
 import com.example.library.dto.genre.GenreDto;
-import com.example.library.mapper.author.AuthorMapper;
 import com.example.library.mapper.genre.GenreMapper;
 import com.example.library.model.genre.Genre;
 import com.example.library.service.genre.GenreService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
 @RestController
 @RequestMapping("/genres")
@@ -23,6 +21,7 @@ import java.util.List;
 public class GenreController {
 
     private final GenreService genreService;
+    private final GenreMapper genreMapper;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -31,20 +30,19 @@ public class GenreController {
     @Secured({"ROLE_ADMIN"})
     ResponseEntity<GenreDto> createGenre(@RequestBody @Valid GenreDto genreDto) {
         Genre newGenre = genreService.addGenre(genreDto);
-        return ResponseEntity.ok(GenreMapper.INSTANCE.toDto(newGenre));
+        return ResponseEntity.ok(genreMapper.toDto(newGenre));
     }
 
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"page", "limit"}
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<List<Genre>> getAllGenres(@RequestParam Pageable pageable) {
+    ResponseEntity<Page<GenreDto>> getAllGenres(Pageable pageable) {
         Page<Genre> allGenres = genreService.getAllGenres(pageable);
         if (allGenres.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(allGenres.toList());
+        return ResponseEntity.ok(allGenres.map(genreMapper::toDto));
     }
 
     @GetMapping(
@@ -52,11 +50,11 @@ public class GenreController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Genre> getGenre(
+    ResponseEntity<GenreDto> getGenre(
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         Genre genreById = genreService.getGenreById(id);
-        return ResponseEntity.ok(genreById);
+        return ResponseEntity.ok(genreMapper.toDto(genreById));
     }
 
     @PatchMapping(

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book addBook(BookDto bookDto) {
-        Book newBook = BookMapper.INSTANCE.dtoToBook(bookDto);
+        Book newBook = bookMapper.dtoToBook(bookDto);
         List<Genre> genreList = genreRepository.getGenreByIdIn(bookDto.getGenresId());
         List<Author> authorList = authorRepository.getAuthorByIdIn(bookDto.getAuthorsId());
         newBook.setAuthors(authorList);
@@ -43,14 +44,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void updateBookById(long id, BookDto bookDto) {
-        bookRepository.findById(id).orElseThrow();
-        Book updated = BookMapper.INSTANCE.dtoToBook(bookDto);
+        bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id:{" + id + "} does not exist"));
+        Book updated = bookMapper.dtoToBook(bookDto);
         bookRepository.save(updated);
     }
 
     @Override
     public Book getBookById(long id) {
-        return bookRepository.getById(id);
+        return bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id:{" + id + "} does not exist"));
     }
 
     @Override

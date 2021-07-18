@@ -21,6 +21,7 @@ import javax.validation.constraints.Positive;
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -29,21 +30,21 @@ public class AuthorController {
     @Secured({"ROLE_ADMIN"})
     ResponseEntity<AuthorDto> createAuthor(@RequestBody @Valid AuthorDto authorDto) {
         Author newAuthor = authorService.addAuthor(authorDto);
-        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(newAuthor));
+        return ResponseEntity.ok(authorMapper.toDto(newAuthor));
     }
 
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"page", "limit"}
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    ResponseEntity<Page<AuthorDto>> getAllAuthors(@RequestParam Pageable pageable) {
+    ResponseEntity<Page<AuthorDto>> getAllAuthors(Pageable pageable) {
         Page<Author> allAuthors = authorService.getAllAuthors(pageable);
         if (allAuthors.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        AuthorMapper authorMapper = AuthorMapper.INSTANCE;
         return ResponseEntity.ok(allAuthors.map(authorMapper::toDto));
+
+
     }
 
     @GetMapping(
@@ -55,7 +56,7 @@ public class AuthorController {
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         Author authorById = authorService.getAuthorById(id);
-        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(authorById));
+        return ResponseEntity.ok(authorMapper.toDto(authorById));
     }
 
     @PatchMapping(

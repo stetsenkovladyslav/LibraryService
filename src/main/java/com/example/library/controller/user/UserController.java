@@ -3,9 +3,10 @@ package com.example.library.controller.user;
 
 import com.example.library.dto.authentication.AuthenticationRequest;
 import com.example.library.dto.user.UserDto;
+import com.example.library.mapper.user.UserMapper;
 import com.example.library.model.user.User;
-import com.example.library.service.user.UserService;
 import com.example.library.security.JwtUtil;
+import com.example.library.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     @PostMapping(
             value = "/login",
@@ -64,16 +66,15 @@ public class UserController {
     }
 
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"limit", "page"}
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Page<User>> getAllRegistrationRequests(@RequestParam Pageable pageable) {
+    public ResponseEntity<Page<UserDto>> getAllRegistrationRequests(Pageable pageable) {
         Page<User> allNotEnabled = userService.getAllNotEnabled(pageable);
         if (allNotEnabled.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(allNotEnabled);
+        return ResponseEntity.ok(allNotEnabled.map(userMapper::toDto));
     }
 
     @GetMapping(
@@ -81,14 +82,14 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<User> getRegistrationRequest(
+    public ResponseEntity<UserDto> getRegistrationRequest(
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         User user = userService.getNotEnabledById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @GetMapping(value = "/new-admin")
