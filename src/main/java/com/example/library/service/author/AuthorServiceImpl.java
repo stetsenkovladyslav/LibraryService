@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
@@ -29,7 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void updateAuthorById(long id, AuthorDto authorDto) {
-        authorRepository.findById(id).orElseThrow();
+        authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Author with id:{" + id + "} does not exist"));
         Author updated = authorMapper.dtoToAuthor(authorDto);
         authorRepository.save(updated);
     }

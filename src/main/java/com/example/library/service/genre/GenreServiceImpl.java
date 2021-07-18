@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
@@ -29,7 +31,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void updateGenre(long id, GenreDto genreDto) {
-        genreRepository.findById(id).orElseThrow();
+        genreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Genre with id:{" + id + "} does not exist"));
         Genre updated = genreMapper.dtoToGenre(genreDto);
         genreRepository.save(updated);
     }

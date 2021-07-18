@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 
@@ -43,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void updateBookById(long id, BookDto bookDto) {
-        bookRepository.findById(id).orElseThrow();
+        bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id:{" + id + "} does not exist"));
         Book updated = bookMapper.dtoToBook(bookDto);
         bookRepository.save(updated);
     }

@@ -57,7 +57,7 @@ public class AuthorController {
             @PathVariable @Valid @Positive(message = "Value must be higher than 0") Long id
     ) {
         Author authorById = authorService.getAuthorById(id);
-        return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(authorById));
+        return ResponseEntity.ok(authorMapper.toDto(authorById));
     }
 
     @PatchMapping(
