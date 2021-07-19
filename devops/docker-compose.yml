@@ -12,6 +12,7 @@ services:
       - db
       - localstack
     environment:
+      AWS_LOCALSTACK_HOSTNAME: http://localstack:4566
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
@@ -36,3 +37,4 @@ services:
       - ./localstack:/tmp/localstack
     ports:
       - 4566:4566
+
