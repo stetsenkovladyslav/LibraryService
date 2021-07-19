@@ -23,9 +23,9 @@ public class AwsConfig {
     @Bean
     @Profile("dev")
 
-    public AmazonS3 localstackClient() {
+    public AmazonS3 localstackClient(@Value("${aws.localstack.hostname}")  String hostName) {
         AmazonS3 localstackClient = AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localstack:4566", "us-west-1"))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(hostName, "us-west-1"))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("accesskey", "secretkey")))
                 .withPathStyleAccessEnabled(true)
                 .build();
