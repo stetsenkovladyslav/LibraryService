@@ -16,14 +16,14 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 
-    /*@ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorMessage()
                         .setMessage("Oops something went wrong")
                         .setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .setTimestamp(Instant.now()));
-    }*/
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleValidationExceptions(MethodArgumentNotValidException ex) {

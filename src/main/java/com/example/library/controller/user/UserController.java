@@ -66,6 +66,7 @@ public class UserController {
     }
 
     @GetMapping(
+            value = "/all",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured("ROLE_ADMIN")

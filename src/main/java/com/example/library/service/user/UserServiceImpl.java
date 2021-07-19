@@ -38,7 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User with username:{" + username + "} does not exist"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException
+                        ("User with username:{" + username + "} does not exist"));
     }
 
     @Override
@@ -96,11 +98,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public Optional<User> findByUsername(String username) {
-        Optional<User> result = userRepository.findByUsername(username);
-        log.info("IN findByUsername - user: {} found by username: {}", result, username);
-        return result;
-    }
+
 
 }
